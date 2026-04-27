@@ -27,7 +27,6 @@ export const ApiKeysModel = {
     message: t.Literal("Failed to fetch api keys"),
   }),
   updateApiKeyBody: t.Object({
-    id: t.String(),
     disabled: t.Boolean(),
   }),
   updateApiKeyResponse: t.Object({

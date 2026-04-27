@@ -3,7 +3,7 @@ import Elysia from "elysia";
 import { ApiKeysService } from "./service";
 import { ApiKeysModel } from "./model";
 
-export const ApiKeysApp = new Elysia({ prefix: "api-keys" })
+export const ApiKeysApp = new Elysia({ prefix: "/api-keys" })
 
   .use(
     jwt({
@@ -14,7 +14,7 @@ export const ApiKeysApp = new Elysia({ prefix: "api-keys" })
   .resolve(async ({ cookie: { auth }, status, jwt }) => {
     if (!auth) return status(401);
     const decoded = await jwt.verify(auth.value as string);
-    if (!decoded || !decoded.verify) return status(401);
+    if (!decoded || !decoded.userId) return status(401);
     return { userId: decoded.userId as string };
   })
 
@@ -66,10 +66,10 @@ export const ApiKeysApp = new Elysia({ prefix: "api-keys" })
   )
 
   .put(
-    "/",
-    async ({ status, userId, body }) => {
+    "/:id",
+    async ({ params: { id }, status, userId, body }) => {
       try {
-        await ApiKeysService.updateApiKey(body.id, userId, body.disabled);
+        await ApiKeysService.updateApiKey(id, userId, body.disabled);
         return status(200, { message: "Updated api key successfully" });
       } catch (e) {
         console.error(e);
