@@ -27,10 +27,10 @@ model ApiKey {
   userId          String
   name            String
   apiKey          String
-  creditsConsumed Int
-  disabled        Boolean
-  deleted         Boolean
-  lastUsed        DateTime
+  creditsConsumed Int            @default(0)
+  disabled        Boolean        @default(false)
+  deleted         Boolean        @default(false)
+  lastUsed        DateTime?
   conversations   Conversation[]
   user            User           @relation(fields: [userId], references: id)
 }
