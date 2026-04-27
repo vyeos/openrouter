@@ -1,6 +1,6 @@
 import Elysia, { Cookie } from "elysia";
 import { jwt } from "@elysia/jwt";
-import { Auth } from "./service";
+import { AuthService } from "./service";
 import { AuthModel } from "./model";
 
 export const AuthApp = new Elysia({ prefix: "/auth" })
@@ -14,7 +14,7 @@ export const AuthApp = new Elysia({ prefix: "/auth" })
     "/sign-up",
     async ({ body, status }) => {
       try {
-        await Auth.signUp(body);
+        await AuthService.signUp(body);
         return status(200, {
           message: "Signed Up Successfully",
         });
@@ -37,7 +37,7 @@ export const AuthApp = new Elysia({ prefix: "/auth" })
   .post(
     "/sign-in",
     async ({ jwt, body, status, cookie: { auth } }) => {
-      const { correctCredentials, userId } = await Auth.signIn(body);
+      const { correctCredentials, userId } = await AuthService.signIn(body);
       if (correctCredentials && userId) {
         const token = await jwt.sign({ userId });
         if (!auth) auth = new Cookie("auth", {});
@@ -70,7 +70,7 @@ export const AuthApp = new Elysia({ prefix: "/auth" })
   .get(
     "/profile",
     async ({ userId, status }) => {
-      const userData = await Auth.getUserDetails(userId);
+      const userData = await AuthService.getUserDetails(userId);
       if (!userData)
         return status(400, { message: "Error while fetching user details" });
       return userData;

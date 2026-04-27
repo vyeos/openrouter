@@ -1,7 +1,7 @@
 import { db } from "db";
 import { AuthModel } from "./model";
 
-export abstract class Auth {
+export abstract class AuthService {
   static async signUp({
     email,
     password,
