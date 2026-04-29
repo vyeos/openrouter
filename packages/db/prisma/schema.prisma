@@ -26,7 +26,7 @@ model ApiKey {
   id              String         @id @default(uuid())
   userId          String
   name            String
-  apiKey          String
+  apiKey          String         @unique
   creditsConsumed Int            @default(0)
   disabled        Boolean        @default(false)
   deleted         Boolean        @default(false)

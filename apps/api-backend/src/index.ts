@@ -49,8 +49,9 @@ const app = new Elysia()
         },
       });
 
-      const provider =
-        providerDb[Math.floor(Math.random() * providerDb.length)].provider;
+      const mapping =
+        providerDb[Math.floor(Math.random() * providerDb.length)];
+      const provider = mapping.provider;
 
       let response: LlmResponse | null = null;
 
@@ -65,8 +66,8 @@ const app = new Elysia()
         return status(403, { message: "No provider found for this model" });
 
       const creditsUsed =
-        (response.inputTokensConsumed * provider.inputTokenCost +
-          response.outputTokensConsumed * provider.outputTokenCost) /
+        (response.inputTokensConsumed * mapping.inputTokenCost +
+          response.outputTokensConsumed * mapping.outputTokenCost) /
         10;
       console.log(creditsUsed);
       const res = await db.user.update({
